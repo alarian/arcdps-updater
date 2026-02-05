@@ -15,6 +15,7 @@ internal class Program
         {
             WriteError("Could not find a Guild Wars 2 installation.");
             WriteError("Ensure GW2 is installed, or run this tool from the GW2 directory.");
+            WaitForKey();
             return 1;
         }
 
@@ -26,6 +27,7 @@ internal class Program
         {
             WriteWarning("Guild Wars 2 is currently running.");
             WriteWarning("Please close the game before updating arcdps (the DLL will be locked).");
+            WaitForKey();
             return 1;
         }
 
@@ -47,6 +49,7 @@ internal class Program
         catch (HttpRequestException ex)
         {
             WriteError($"Failed to fetch update info: {ex.Message}");
+            WaitForKey();
             return 1;
         }
 
@@ -69,6 +72,7 @@ internal class Program
         if (localMd5 is not null && string.Equals(localMd5, remoteMd5, StringComparison.OrdinalIgnoreCase))
         {
             WriteSuccess("arcdps is already up to date.");
+            WaitForKey();
             return 0;
         }
 
@@ -92,12 +96,14 @@ internal class Program
         {
             WriteError($"Download failed: {ex.Message}");
             ArcdpsUpdater.CleanupTemp(gw2Path);
+            WaitForKey();
             return 1;
         }
         catch (IOException ex)
         {
             WriteError($"Download failed (IO): {ex.Message}");
             ArcdpsUpdater.CleanupTemp(gw2Path);
+            WaitForKey();
             return 1;
         }
 
@@ -108,6 +114,7 @@ internal class Program
             WriteError("MD5 verification failed — downloaded file does not match expected hash.");
             WriteError("The download may be corrupted. Please try again.");
             ArcdpsUpdater.CleanupTemp(gw2Path);
+            WaitForKey();
             return 1;
         }
 
@@ -122,12 +129,14 @@ internal class Program
         {
             WriteError("Access denied. Try running as administrator.");
             ArcdpsUpdater.CleanupTemp(gw2Path);
+            WaitForKey();
             return 1;
         }
         catch (IOException ex)
         {
             WriteError($"Failed to replace DLL: {ex.Message}");
             ArcdpsUpdater.CleanupTemp(gw2Path);
+            WaitForKey();
             return 1;
         }
 
@@ -139,7 +148,14 @@ internal class Program
             Console.WriteLine($"  Previous version backed up to {ArcdpsUpdater.GetBackupDllPath(gw2Path)}");
 
         Console.WriteLine();
+        WaitForKey();
         return 0;
+    }
+
+    private static void WaitForKey()
+    {
+        Console.WriteLine("  Press any key to exit...");
+        Console.ReadKey(intercept: true);
     }
 
     private static void WriteSuccess(string message)
