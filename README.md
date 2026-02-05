@@ -13,20 +13,10 @@ A command-line tool that automatically updates [arcdps](https://www.deltaconnect
 ## Requirements
 
 - Windows
-- [.NET 10 Runtime](https://dotnet.microsoft.com/download/dotnet/10.0)
 
 ## Usage
 
-```
-dotnet run --project arcdps-updater
-```
-
-Or build and run the executable directly:
-
-```
-dotnet build
-.\arcdps-updater\bin\Debug\net10.0-windows\arcdps-updater.exe
-```
+Download the latest `arcdps-updater.exe` from the [Releases](https://github.com/alarian/arcdps-updater/releases) page and run it.
 
 Example output:
 
@@ -55,7 +45,9 @@ Example output:
 4. If an update is available, prompts for confirmation
 5. Downloads to a temp file, verifies the MD5, then swaps it in with a backup of the old version
 
-## Building
+## Building from source
+
+Requires [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0).
 
 ```
 dotnet build
